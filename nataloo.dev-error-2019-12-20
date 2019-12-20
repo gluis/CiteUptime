@@ -1,0 +1,3 @@
+
+2019-12-20-16:43:55-HTTPSConnectionPool(host='nataloo.dev', port=443): Max retries exceeded with url: / (Caused by ConnectTimeoutError(<urllib3.connection.VerifiedHTTPSConnection object at 0x10f466a90>, 'Connection to nataloo.dev timed out. (connect timeout=3)'))
+2019-12-20-16:44:03-HTTPSConnectionPool(host='nataloo.dev', port=443): Max retries exceeded with url: / (Caused by ConnectTimeoutError(<urllib3.connection.VerifiedHTTPSConnection object at 0x109e3ca90>, 'Connection to nataloo.dev timed out. (connect timeout=3)'))

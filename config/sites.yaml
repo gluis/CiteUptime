@@ -1,0 +1,7 @@
+sites:
+  site-1:
+    name: example.com
+    paths: [("/","What we do"), ("/contact","Contact us")]
+  site-2:
+    name: example.org
+    paths: [("/about","Our mission..."), ("/contact","Contact the peeps")]

@@ -1,5 +1,8 @@
-config/credentials.yaml
+.credentials.yaml
+.sites.yaml
 logs/*
+
+.DS_Store
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

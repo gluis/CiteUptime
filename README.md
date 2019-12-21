@@ -3,10 +3,16 @@
 A site monitoring tool written in python to check to see if a site is up and the selected page(s) are responding properly
 
 ### Usage
+You only need to configure it once, then run it. It spawns one thread per site you give it.
+You need: 
+    1. Access to an smtp server or smpt server account
+    2. A site or list of sites you want to monitor
+    3. python3
 
-- create folder config/
-    - inside, create credentials.yaml
-    - add smtp credentials like so:
+#### Configuration
+In config/
+
+    - update credentials.yaml with your own credentials:
     ```
     from_email: you@example.com
     to_email: someone@example.com
@@ -14,19 +20,27 @@ A site monitoring tool written in python to check to see if a site is up and the
     server: smtp.example.com
     port: 587
     ```
-- create folder logs/
 
-*In your code*:
+    - update sites.yaml with your sites like so:
+    ```
+    ---
+    name: example1.com
+    paths: 
+      - ["/","What we do"], 
+      - ["/contact","Contact us"]
+    ---
+    name: example2.org
+    paths: 
+      - ["/about","Our mission..."]
+    ```
 
-1. Import checker
-2. Init with domain name, then a List of tuples(path,text-to-seek)
-This will load the page and look for the text, if the text isn't found, it's assumed there's something wrong and logs are written and the authorities are notified...as they should be when something goes wrong.
-
+Run it with 
 ```
-    import checker
-
-    c = checker.Checker("example.com", [("/","Something on the homepage"),("/contact","Text on the contact page")])
-    c.start_schedule()
-
+    python3 run_checker.py &
 ```
 
+to let it continue after logging off.
+
+### TODO
+- Make usage more user-friendly
+- Create web interface to manage sites

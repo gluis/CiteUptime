@@ -1,7 +1,0 @@
-1. ping site
-2. if ping, check for page(s)
-  2.2 if no page, write to log and notify
-      else do nothing
-3. else no ping, write to log and notify
-
-4. every 24 hours if all well, write to log that all is well

@@ -1,6 +1,6 @@
 .credentials.yaml
 .sites.yaml
-logs/*
+
 
 .DS_Store
 

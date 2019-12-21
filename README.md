@@ -42,5 +42,4 @@ Run it with
 to let it continue after logging off.
 
 ### TODO
-- Make usage more user-friendly
-- Create web interface to manage sites
+- Create web interface to manage sites, so more than terminal monkeys can use it

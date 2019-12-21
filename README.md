@@ -12,7 +12,7 @@ You need:
 #### Configuration
 In config/
 
-    - update credentials.yaml with your own credentials:
+Update credentials.yaml with your own credentials:
     ```
     from_email: you@example.com
     to_email: someone@example.com
@@ -21,7 +21,7 @@ In config/
     port: 587
     ```
 
-    - update sites.yaml with your sites like so:
+Update sites.yaml with your sites like so:
     ```
     ---
     name: example1.com

@@ -14,17 +14,14 @@ In config/
 
 Update credentials.yaml with your own credentials:
 
-    ```
     from_email: you@example.com
     to_email: someone@example.com
     password: super-secret-password
     server: smtp.example.com
     port: 587
-    ```
 
 Update sites.yaml with your sites like so:
 
-    ```
     ---
     name: example1.com
     paths: 
@@ -34,7 +31,6 @@ Update sites.yaml with your sites like so:
     name: example2.org
     paths: 
       - ["/about","Our mission..."]
-    ```
 
 Run it with 
 ```

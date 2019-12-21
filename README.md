@@ -13,6 +13,7 @@ You need:
 In config/
 
 Update credentials.yaml with your own credentials:
+
     ```
     from_email: you@example.com
     to_email: someone@example.com
@@ -22,6 +23,7 @@ Update credentials.yaml with your own credentials:
     ```
 
 Update sites.yaml with your sites like so:
+
     ```
     ---
     name: example1.com

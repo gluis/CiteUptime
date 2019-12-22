@@ -4,7 +4,7 @@ from urllib.parse import urljoin
 import subprocess
 import schedule
 import time
-import notifier
+import libs.notifier as notifier
 
 
 class Checker:
@@ -54,7 +54,7 @@ class Checker:
 				logfile.write(message)
 
 	def __write_success(self):
-		self.__write_to_log(message='[+] All is well in the intertubes : ' + self.__domainname, logtype='success')
+		self.__write_to_log(message='\n[+] All is well in the intertubes : ' + self.__domainname, logtype='success')
 
 	def __notify_recipient(self, message):
 		n = notifier.Notifier('Message from CiteUptime for ' + self.__domainname, message)

@@ -1,4 +1,4 @@
-import send_mail
+import libs.send_mail as send_mail
 import threading
 import yaml
 

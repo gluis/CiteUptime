@@ -74,8 +74,8 @@ class Checker:
 			self.__write_to_log(message='[-] Ping unsuccessful')
 
 	def start_schedule(self):
-		# schedule.every(15).minutes.do(self.start)
-		schedule.every(60).seconds.do(self.start)
+		schedule.every(15).minutes.do(self.start)
+		# schedule.every(60).seconds.do(self.start)
 		schedule.every().day.at("05:00").do(self.__write_success)
 		while True:
 			schedule.run_pending()

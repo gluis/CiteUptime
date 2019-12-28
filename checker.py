@@ -54,7 +54,9 @@ class Checker:
 				logfile.write(message)
 
 	def __write_success(self):
-		self.__write_to_log(message='\n[+] All is well in the intertubes : ' + self.__domainname, logtype='success')
+		if not self.__has_errors:
+			self.__write_to_log(message='\n[+] All is well in the intertubes : ' + self.__domainname, logtype='success')
+		self.__has_errors = False
 
 	def __notify_recipient(self, message):
 		n = notifier.Notifier('Message from CiteUptime for ' + self.__domainname, message)
@@ -71,7 +73,7 @@ class Checker:
 	def start_schedule(self):
 		schedule.every(15).minutes.do(self.start)
 		# schedule.every(30).seconds.do(self.start)
-		schedule.every().day.at("00:00").do(self.__write_success)
+		schedule.every().day.at("05:00").do(self.__write_success)
 		while True:
 			schedule.run_pending()
 			time.sleep(1)

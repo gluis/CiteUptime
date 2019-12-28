@@ -42,7 +42,7 @@ class Checker:
 		date = datetime.datetime.now().strftime("%Y-%m-%d-%H:%M:%S-")
 		logdate = datetime.datetime.now().strftime("%Y-%m-%d")
 		message = '\n' + date + str(message)
-		self.__notify_recipient(message)
+		self.__notify_recipient(message, logtype)
 		if logtype != 'error':
 			logfilename = "logs/" + self.__domainname + '-success-' + logdate
 			with open(logfilename, "a+") as logfile:
@@ -58,8 +58,11 @@ class Checker:
 			self.__write_to_log(message='\n[+] All is well in the intertubes : ' + self.__domainname, logtype='success')
 		self.__has_errors = False
 
-	def __notify_recipient(self, message):
-		n = notifier.Notifier('Message from CiteUptime for ' + self.__domainname, message)
+	def __notify_recipient(self, message, logtype):
+		if logtype == 'error':
+			n = notifier.Notifier('Errors: CiteUptime for ' + self.__domainname, message)
+		else:
+			n = notifier.Notifier('All good: CiteUptime for ' + self.__domainname, message)
 		n.send()
 
 	def start(self):
@@ -71,8 +74,8 @@ class Checker:
 			self.__write_to_log(message='[-] Ping unsuccessful')
 
 	def start_schedule(self):
-		schedule.every(15).minutes.do(self.start)
-		# schedule.every(30).seconds.do(self.start)
+		# schedule.every(15).minutes.do(self.start)
+		schedule.every(60).seconds.do(self.start)
 		schedule.every().day.at("05:00").do(self.__write_success)
 		while True:
 			schedule.run_pending()

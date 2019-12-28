@@ -5,8 +5,8 @@ import os
 
 def monitor_site(site):
     c = checker.Checker(site["name"], site["paths"])
-    c.start()
-    # c.start_schedule()
+    # c.start()
+    c.start_schedule()
 
 if __name__ == "__main__":
 

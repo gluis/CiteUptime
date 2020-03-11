@@ -1,14 +1,18 @@
+"""
+Tests for checker class
+"""
+
 import unittest
-from unittest.mock import MagicMock
 import unittest.mock as mock
+import subprocess
 
 from libs.checker import checker
 
-import requests
-import subprocess
-
 
 class DummyObject:
+    """
+    Dummy object to retrieve responses
+    """
     args = []
     returncode = 0
     status_code = 0
@@ -16,13 +20,20 @@ class DummyObject:
 
 
 class TestChecker(unittest.TestCase):
+    """
+    Tests for checker.py
+    """
 
     def setUp(self):
-        self.c = checker.Checker("example.com", [["/", "Example"]])
-        self.f2 = checker.Checker(
-            "example.com", [["/", "PWKQEOBWUQNQPQRHILUN"]])
-        self.f3 = checker.Checker(
-            "PWKQEOBWUQNQPQRHILUN.org", [["/", "Example"]])
+        self.ckr = checker.Checker("example.com", True, [["/", "Example"]])
+        self.fail2 = checker.Checker(
+            "example.com", True, [["/", "PWKQEOBWUQNQPQRHILUN"]])
+        self.fail3 = checker.Checker(
+            "PWKQEOBWUQNQPQRHILUN.org", True, [["/", "Example"]])
+        self.fail4 = checker.Checker(
+            "PWKQEOBWUQNQPQRHILUN.org", False, [["/", "Example"]])
+        self.no_ping = checker.Checker(
+            "example.com", False, [["/", "Example"]])
 
     def test_ping_host_success(self):
         """
@@ -32,14 +43,14 @@ class TestChecker(unittest.TestCase):
         completed_process.returncode = 0
         subprocess.run = mock.create_autospec(
             subprocess.run, return_value=completed_process)
-        response = self.c._Checker__ping_host()
+        response = self.ckr._Checker__ping_host()
         self.assertEqual(response, 0)
 
     def test_ping_host_fail(self):
         """
         Test that pinging fails gracefully
         """
-        response = self.f3._Checker__ping_host()
+        response = self.fail3._Checker__ping_host()
         self.assertNotEqual(response, 0)
 
     def test_check_page_success(self):
@@ -47,39 +58,55 @@ class TestChecker(unittest.TestCase):
         Test that retrieving content from page successfully calls next method
         """
         # c = checker.Checker("example.com", [["/", "Example"]])
-        c = self.c
-        c._Checker__check_page_content = mock.Mock()
-        c._Checker__write_to_log = mock.Mock()
-        c._Checker__check_page()
-        c._Checker__check_page_content.assert_called()
+        ckr = self.ckr
+        ckr._Checker__check_page_content = mock.Mock()
+        ckr._Checker__write_to_log = mock.Mock()
+        ckr._Checker__check_page()
+        ckr._Checker__check_page_content.assert_called()
 
     def test_check_page_fail(self):
         """
         Test that not retrieving page writes to log
         """
-        c = self.f3
-        c._Checker__check_page_content = mock.Mock()
-        c._Checker__write_to_log = mock.Mock()
-        c._Checker__check_page()
-        c._Checker__check_page_content.assert_not_called()
+        ckr = self.fail3
+        ckr._Checker__check_page_content = mock.Mock()
+        ckr._Checker__write_to_log = mock.Mock()
+        ckr._Checker__check_page()
+        ckr._Checker__check_page_content.assert_not_called()
 
     def test_check_page_content_success(self):
         """
         Test content match
         """
-        c = self.c
-        c._Checker__write_to_log = mock.Mock()
-        c._Checker__check_page()
-        c._Checker__write_to_log.assert_not_called()
+        ckr = self.ckr
+        ckr._Checker__write_to_log = mock.Mock()
+        ckr._Checker__check_page()
+        ckr._Checker__write_to_log.assert_not_called()
 
     def test_check_page_content_fail(self):
         """
         Test that not retrieving page writes to log
         """
-        c = self.f2
-        c._Checker__write_to_log = mock.Mock()
-        c._Checker__check_page()
-        c._Checker__write_to_log.assert_called()
+        ckr = self.fail2
+        ckr._Checker__write_to_log = mock.Mock()
+        ckr._Checker__check_page()
+        ckr._Checker__write_to_log.assert_called()
+
+    def test_if_checker_receives_true_as_last_arg_ping_is_skipped(self):
+        """
+        Test that ping is skipped if last arg is true
+        """
+        response = self.fail4._Checker__ping_host()
+        self.assertEqual(response, 0)
+
+    def test_checker_without_ping_scans_content(self):
+        """
+        Test that content is scanned still if no ping is set
+        """
+        ckr = self.no_ping
+        ckr._Checker__write_to_log = mock.Mock()
+        ckr._Checker__check_page()
+        ckr._Checker__write_to_log.assert_not_called()
 
 
 if __name__ == "__main__":

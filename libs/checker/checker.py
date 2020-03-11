@@ -1,36 +1,43 @@
-import requests
+"""Checker checks for site details"""
+
 import datetime
 from urllib.parse import urljoin
 import subprocess
-import schedule
 import time
+import requests
+import schedule
 from libs.notifier import notifier
 
 
 class Checker:
     """
-    Checks for site presence and checks content on select pages. Logs and notifies of failures 
-    as they happen. Notifies of no issues every 24 hours. 
+    Checks for site presence and checks content on select
+    pages. Logs and notifies of failures as they happen.
+    Notifies of no issues every 24 hours.
     """
 
-    def __init__(self, domainname, paths):
+    def __init__(self, domainname, ping, paths):
         self.__domainname = domainname
         self.__paths = paths
+        self.__ping = ping
         self.__has_errors = False
 
     def __ping_host(self):
         """
         Use OS to ping domain for up check
         """
-        return subprocess.run(
-            ["ping", "-c", "3", self.__domainname],
-            stdout=subprocess.DEVNULL,
-            stderr=subprocess.DEVNULL,
-        ).returncode
+        if self.__ping:
+            return subprocess.run(
+                ["ping", "-c", "3", self.__domainname],
+                stdout=subprocess.DEVNULL,
+                stderr=subprocess.DEVNULL,
+            ).returncode
+        return 0
 
     def __check_page(self,):
         """
-        Retrieve page to check content match. Success == check content; Failure == log and notify
+        Retrieve page to check content match.
+        Success == check content; Failure == log and notify
         """
         for path, text in self.__paths:
             try:
@@ -47,8 +54,8 @@ class Checker:
                         + self.__domainname
                     )
                     self.__write_to_log(message=message)
-            except requests.exceptions.ConnectionError as e:
-                message = "[-] ConnectionError: " + str(e)
+            except requests.exceptions.ConnectionError as err:
+                message = "[-] ConnectionError: " + str(err)
                 self.__write_to_log(message=message)
 
     def __check_page_content(self, content, text):
@@ -89,16 +96,17 @@ class Checker:
 
     def __notify_recipient(self, message, logtype):
         if logtype == "error":
-            n = notifier.Notifier(
+            nfr = notifier.Notifier(
                 "Errors: CiteUptime for " + self.__domainname, message
             )
         else:
-            n = notifier.Notifier(
+            nfr = notifier.Notifier(
                 "All good: CiteUptime for " + self.__domainname, message
             )
-        n.send()
+        nfr.send()
 
     def start(self):
+        """Function to run once"""
         ping_result = self.__ping_host()
         if ping_result == 0:
             self.__check_page()
@@ -107,6 +115,7 @@ class Checker:
             self.__write_to_log(message="[-] Ping unsuccessful")
 
     def start_schedule(self):
+        """Function to run on a schedule"""
         schedule.every(15).minutes.do(self.start)
         # schedule.every(60).seconds.do(self.start)
         schedule.every().day.at("05:00").do(self.__write_success)

@@ -1,9 +1,11 @@
 ---
 name: example1.com
+ping: True
 paths: 
   - ["/","What we do"], 
   - ["/contact","Contact us"]
 ---
 name: example2.org
+ping: False
 paths: 
   - ["/about","Our mission..."]

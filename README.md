@@ -1,6 +1,12 @@
 # CiteUptime
 
-A site monitoring tool written in python to check to see if a site is up and the selected page(s) are responding properly
+A site monitoring tool written in python to check to see if a site is up and the selected page(s) are responding properly. You can bypass pinging the site initially if the site ignores pings (e.g. some serverless services ignore them). Just set 
+
+    ping: False 
+
+Otherwise, set to 
+
+    ping: True.
 
 ### Usage
 You only need to configure it once, then run it. It spawns one thread per site you give it.
@@ -24,11 +30,13 @@ Update sites.yaml with your sites like so:
 
     ---
     name: example1.com
+    ping: True
     paths: 
       - ["/","What we do"], 
       - ["/contact","Contact us"]
     ---
     name: example2.org
+    ping: False
     paths: 
       - ["/about","Our mission..."]
 

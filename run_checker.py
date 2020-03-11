@@ -12,8 +12,9 @@ def monitor_site(target_site):
     """
     Function to control monitoring
     """
-    ckr = checker.Checker(target_site["name"], target_site["paths"])
-    # c.start()
+    ckr = checker.Checker(
+        target_site["name"], target_site["ping"], target_site["paths"])
+    # ckr.start()
     ckr.start_schedule()
 
 

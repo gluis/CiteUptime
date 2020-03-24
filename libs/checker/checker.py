@@ -24,7 +24,8 @@ class Checker:
 
     def __ping_host(self):
         """
-        Use OS to ping domain for up check
+        Use OS to ping domain for up check. If ping == False,
+        return success (0)
         """
         if self.__ping:
             return subprocess.run(
@@ -106,7 +107,7 @@ class Checker:
         nfr.send()
 
     def start(self):
-        """Function to run once"""
+        """Function to run once. Pings, then checks, else writes error."""
         ping_result = self.__ping_host()
         if ping_result == 0:
             self.__check_page()

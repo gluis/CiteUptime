@@ -1,4 +1,6 @@
-# !/usr/bin/python
+"""
+Send_mail sends mail. I know, it's hard to fathom.
+"""
 
 import sys
 # import subprocess
@@ -6,6 +8,9 @@ import smtplib
 
 
 class ParameterError(Exception):
+    """
+    Custom error if wrong parameters passed
+    """
 
     def __init__(self, value):
         self.value = value
@@ -15,6 +20,9 @@ class ParameterError(Exception):
 
 
 class SendMail:
+    """
+    SendMail handles configuring the mail to be sent and sends it
+    """
 
     def __init__(self, **kwargs):
         try:
@@ -40,15 +48,20 @@ class SendMail:
                 self._smtp__server.starttls()
                 self._smtp__server.login(self.__from_email, self.__password)
             else:
+                required_params = 'from_email, to_email, password, server, port, msg, subject'
                 raise ParameterError(
-                    'Not enough parameters: from_email, to_email, password, server, port, msg, subject')
-        except ParameterError as e:
-            print (e.value)
+                    'Not enough parameters. ' + required_params + ' are all required')
+        except ParameterError as err:
+            print(err.value)
             sys.exit()
 
     def _add__subject(self):
         self.__msg = "Subject: " + self.__subject + "\n\n" + self.__msg
 
     def send(self):
-        self._smtp__server.sendmail(self.__from_email, self.__to_email, self.__msg)
+        """
+        Only public method, sends mail using smtplib's SMTP server
+        """
+        self._smtp__server.sendmail(
+            self.__from_email, self.__to_email, self.__msg)
         self._smtp__server.quit()

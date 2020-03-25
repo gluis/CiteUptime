@@ -11,11 +11,12 @@ Otherwise, set to
 ### Usage
 IMPORTANT UPDATE: only tested with 3.8.0. Singleton pattern used for db won't work
 pre 3.7.
+
 You only need to configure it once, then run it. It spawns one thread per site you give it.
 You need: 
-    1. Access to an smtp server or smpt server account
-    2. A site or list of sites you want to monitor
-    3. python3
+1. Access to an smtp server or smpt server account
+2. A site or list of sites you want to monitor
+3. python3.8
 
 #### Configuration
 In config/
@@ -44,10 +45,11 @@ Update sites.yaml with your sites like so:
 
 Run it with 
 ```
-    python3 run_checker.py &
+    python3.8 run_checker.py &
 ```
 
 to let it continue after logging off.
 
 ### TODO
+- Set up as daemon
 - Create web interface to manage sites, so more than terminal monkeys can use it

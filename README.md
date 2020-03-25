@@ -9,6 +9,8 @@ Otherwise, set to
     ping: True.
 
 ### Usage
+IMPORTANT UPDATE: only tested with 3.8.0. Singleton pattern used for db won't work
+pre 3.7.
 You only need to configure it once, then run it. It spawns one thread per site you give it.
 You need: 
     1. Access to an smtp server or smpt server account

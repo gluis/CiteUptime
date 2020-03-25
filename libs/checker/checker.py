@@ -7,6 +7,7 @@ import time
 import requests
 import schedule
 from libs.notifier import notifier
+from libs.site_db import site_db
 
 
 class Checker:
@@ -16,11 +17,12 @@ class Checker:
     Notifies of no issues every 24 hours.
     """
 
-    def __init__(self, domainname, ping, paths):
-        self.__domainname = domainname
-        self.__paths = paths
-        self.__ping = ping
+    def __init__(self, site):
+        self.__domainname = site["name"]
+        self.__paths = site["paths"]
+        self.__ping = site["ping"]
         self.__has_errors = False
+        self.__database = site_db.SiteDB()
 
     def __ping_host(self):
         """
@@ -32,6 +34,7 @@ class Checker:
                 ["ping", "-c", "3", self.__domainname],
                 stdout=subprocess.DEVNULL,
                 stderr=subprocess.DEVNULL,
+                check=False
             ).returncode
         return 0
 
@@ -82,6 +85,7 @@ class Checker:
                 logfile.write(message)
         else:
             self.__has_errors = True
+            self.__database.remove_site(self.__domainname)
             logfilename = "logs/" + self.__domainname + "-error-" + logdate
             with open(logfilename, "a+") as logfile:
                 logfile.write(message)
@@ -93,17 +97,19 @@ class Checker:
                 self.__domainname,
                 logtype="success",
             )
-        self.__has_errors = False
+        if self.__has_errors:
+            self.__database.add_site(self.__domainname)
+            self.__has_errors = False
 
     def __notify_recipient(self, message, logtype):
         if logtype == "error":
             nfr = notifier.Notifier(
                 "Errors: CiteUptime for " + self.__domainname, message
             )
-        else:
-            nfr = notifier.Notifier(
-                "All good: CiteUptime for " + self.__domainname, message
-            )
+        # else:
+        #     nfr = notifier.Notifier(
+        #         "All good: CiteUptime for " + self.__domainname, message
+        #     )
         nfr.send()
 
     def start(self):
@@ -119,7 +125,7 @@ class Checker:
         """Function to run on a schedule"""
         schedule.every(15).minutes.do(self.start)
         # schedule.every(60).seconds.do(self.start)
-        schedule.every().day.at("05:00").do(self.__write_success)
+        # schedule.every().day.at("05:00").do(self.__write_success)
         while True:
             schedule.run_pending()
             time.sleep(1)

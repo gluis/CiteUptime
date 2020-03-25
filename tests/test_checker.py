@@ -25,15 +25,22 @@ class TestChecker(unittest.TestCase):
     """
 
     def setUp(self):
-        self.ckr = checker.Checker("example.com", True, [["/", "Example"]])
-        self.fail2 = checker.Checker(
-            "example.com", True, [["/", "PWKQEOBWUQNQPQRHILUN"]])
-        self.fail3 = checker.Checker(
-            "PWKQEOBWUQNQPQRHILUN.org", True, [["/", "Example"]])
-        self.fail4 = checker.Checker(
-            "PWKQEOBWUQNQPQRHILUN.org", False, [["/", "Example"]])
-        self.no_ping = checker.Checker(
-            "example.com", False, [["/", "Example"]])
+        good_site = {"name": "example.com",
+                     "ping": True, "paths": [["/", "Example"]]}
+        good_site_no_ping = {"name": "example.com",
+                             "ping": False, "paths": [["/", "Example"]]}
+        fail_site1 = {"name": "example.com", "ping": True,
+                      "paths": [["/", "PWKQEOBWUQNQPQRHILUN"]]}
+        fail_site2 = {"name": "PWKQEOBWUQNQPQRHILUN.org",
+                      "ping": True, "paths": [["/", "Example"]]}
+        fail_site3 = {"name": "PWKQEOBWUQNQPQRHILUN.org",
+                      "ping": False, "paths": [["/", "Example"]]}
+
+        self.ckr = checker.Checker(good_site)
+        self.fail2 = checker.Checker(fail_site1)
+        self.fail3 = checker.Checker(fail_site2)
+        self.fail4 = checker.Checker(fail_site3)
+        self.no_ping = checker.Checker(good_site_no_ping)
 
     def test_ping_host_success(self):
         """

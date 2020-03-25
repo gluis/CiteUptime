@@ -8,10 +8,12 @@ import libs.notifier.send_mail as send_mail
 
 
 class Notifier:
-    '''Notifier sends message'''
+    """
+    Notifier sends message
+    """
 
     def __init__(self, subject, message):
-        with open('config/credentials.yaml', 'r') as file:
+        with open('config/.credentials.yaml', 'r') as file:
             self.__server_params = yaml.load(file, Loader=yaml.FullLoader)
 
         self.__subject = subject

@@ -58,7 +58,8 @@ if __name__ == "__main__":
     # read config for sites
     with open('config/sites.yaml', 'r') as file:
         SITES = []
-        for data in yaml.load_all(file, Loader=yaml.FullLoader):
+        # for data in yaml.load_all(file, Loader=yaml.FullLoader):
+        for data in yaml.load_all(file):
             SITES.append(data)
             DB.add_site(data['name'])
 

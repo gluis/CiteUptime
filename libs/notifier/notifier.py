@@ -13,7 +13,7 @@ class Notifier:
     """
 
     def __init__(self, subject, message):
-        with open('config/.credentials.yaml', 'r') as file:
+        with open('config/credentials.yaml', 'r') as file:
             self.__server_params = yaml.load(file, Loader=yaml.FullLoader)
 
         self.__subject = subject

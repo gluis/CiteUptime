@@ -29,7 +29,6 @@ def notify():
     """
     Function to handle sending 24 hour success message
     """
-    # schedule.every(30).seconds.do(send_ok_message)
     schedule.every().day.at("05:00").do(send_ok_message)
     while True:
         schedule.run_pending()
@@ -41,13 +40,10 @@ def send_ok_message():
     Send success message after formatting message
     """
     sites = DB.get_sites()
-    print(sites)
     subject = "All is good in the intertubes"
     message = "The following sites have had no errors for 24 hours:\n"
     for name in sites:
         message += name + "\n"
-    print(subject)
-    print(message)
     ntf = notifier.Notifier(subject, message)
     ntf.send()
 
@@ -60,7 +56,7 @@ if __name__ == "__main__":
         os.mkdir('logs')
 
     # read config for sites
-    with open('config/.sites.yaml', 'r') as file:
+    with open('config/sites.yaml', 'r') as file:
         SITES = []
         for data in yaml.load_all(file, Loader=yaml.FullLoader):
             SITES.append(data)
